@@ -15,6 +15,8 @@ public class Search {
     public PentominoBuilder database = new PentominoBuilder();
     public UI ui;
     
+    public boolean[][] used;
+    
     public int[][] field;
     public int[] mask;
     
@@ -23,6 +25,8 @@ public class Search {
         NUMBER_OF_ROWS = height;
         NUMBER_OF_COLS = width;
         ANIMATED = ani;
+        
+        used = new boolean[NUMBER_OF_ROWS][NUMBER_OF_COLS];
     	
         if (ANIMATED)
         	ui = new UI(NUMBER_OF_ROWS, NUMBER_OF_COLS, DEFAULT_CELL_SIZE);
@@ -123,7 +127,6 @@ public class Search {
     	return true;
     }
     
-    public boolean[][] used = new boolean[NUMBER_OF_ROWS][NUMBER_OF_COLS];
     public int dfs(int i, int j) {
     	used[i][j] = true;
     	int sum = 1;
