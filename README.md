@@ -4,10 +4,9 @@ Working product, to be tested and presented.
 
 Please, comment and discuss any changes within this branch with group members from now on.
 
+0.1.1 Runner.java is implemented. Program got much more interactive.
 
-TO DO: tester class, 2D dancing links class, Algorithm X class.  
-
-0.1.0 Duplicates are removed now.
+0.1.0 Duplicates are removed, which allows to achieve much better execution time.
 
 0.0.1 Updated code style.
 
