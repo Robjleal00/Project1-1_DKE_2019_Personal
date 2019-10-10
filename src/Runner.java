@@ -16,8 +16,9 @@ public class Runner {
 		System.out.println("Enter \"yes\" for animated version and \"no\" for the faster answer: ");
 		String animation = in.next();
 		
-		System.out.println("Enter the pentominoes you want to play with (with the number in the beginning): ");
+		System.out.println("Enter the number of pentominoes: ");
 		int inputSize = in.nextInt();
+		System.out.println("Enter the all the pentominoes, separated with one empty space (e.g. X F Y): ");
 		String[] input = new String[inputSize];
 		for (int i = 0; i < inputSize; i++) {
 			input[i] = in.next();
