@@ -3,69 +3,62 @@ import java.util.concurrent.TimeUnit;
 
 public class Search {
 	
-    public final int NUMBER_OF_ROWS = 12;                   // the number of rows
-    public final int NUMBER_OF_COLS = 5;                   // the number of columns
+    public int NUMBER_OF_ROWS = 6;                  //
+    public int NUMBER_OF_COLS = 5;                   // 
     public final int DEFAULT_CELL_SIZE = 50;                
     public final int PENT_SIZE = 5;
     public final int LOC_CENT_X = 2;
     public final int LOC_CENT_Y = 2;
-    public final char[] INPUT = {'I', 'V', 'W', 'L', 'Z', 'P', 'N', 'Y', 'F', 'U', 'X', 'T'};    // sample INPUT
-    //public final char[] INPUT = {'T', 'W', 'Z', 'L', 'I', 'Y'};    // sample INPUT
+    public char[] INPUT = {'T', 'W', 'Z', 'L', 'I', 'Y'};    // sample INPUT
+    public boolean ANIMATED = true;
     
     public PentominoBuilder database = new PentominoBuilder();
-    public UI ui = new UI(NUMBER_OF_ROWS, NUMBER_OF_COLS, DEFAULT_CELL_SIZE);
+    public UI ui;
     
-    public int[][] field = new int[NUMBER_OF_ROWS][NUMBER_OF_COLS];
-    /*public int[][] field = { {-1, -1, -1, -1, -1, -1},
-    		                 {-1, -1, -1, -1, -1, -1},
-    		                 {-1, -1, -1, -1, -1, -1},
-    		                 {-1, -1, -1, -1, -1, -1},
-    		                 {-1, -1, -1, -1, -1, -1},
-    	                   	 {-1, -1, -1, -1, -1, -1} };*/
-    public int[] mask = {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1};
-    //public int[] mask = {1, 1, 1, 1, 1, 1};
+    public int[][] field;
+    public int[] mask;
     
     // Helper function which starts the brute force algorithm
-    public Search() {
-    	long start = System.nanoTime();
+    public Search(int height, int width, boolean ani, char[] inp) {
+        NUMBER_OF_ROWS = height;
+        NUMBER_OF_COLS = width;
+        ANIMATED = ani;
     	
-    	// Initialize an empty board
-    	
-        for(int i = 0; i < NUMBER_OF_ROWS; i++) {
+        if (ANIMATED)
+        	ui = new UI(NUMBER_OF_ROWS, NUMBER_OF_COLS, DEFAULT_CELL_SIZE);
+        
+    	field = new int[height][width];
+    	for(int i = 0; i < NUMBER_OF_ROWS; i++) {
             for(int j = 0; j < NUMBER_OF_COLS; j++) {
                 // -1 in the state matrix corresponds to empty square
                 // Any positive number identifies the ID of the pentomino
                 field[i][j] = -1;
             }
         }
-        
+    	mask = new int[inp.length];
+        for (int i = 0; i < inp.length; i++) {
+        	mask[i] = 1;
+        }
+    	
+    	INPUT = inp;
+    	
         boolean result = false;
         for (int centY = 0; centY < NUMBER_OF_ROWS && (!result); centY++) {
         	for (int centX = 0; centX < NUMBER_OF_COLS && (!result); centX++) {
         		result = backtracking(centX, centY);
         	}
         }
-        
-        long finish = System.nanoTime();
-        System.out.println("Execution time is " + (double)(finish - start) / 1e9 + " s");
-        
+       
         if (!result) {
-        	ui.closeWindow();
         	System.out.println("No solution");
-        	System.out.println("Finished");
         } else {
+        	if (!ANIMATED)
+        		ui = new UI(NUMBER_OF_ROWS, NUMBER_OF_COLS, DEFAULT_CELL_SIZE);
+     
         	ui.setState(field);
-        	try {
-    		    Thread.sleep(5000);
-    		}
-    		catch(InterruptedException ex) {
-    		    Thread.currentThread().interrupt();
-    		}
-            
-            ui.closeWindow();
-            System.out.println("Solution found");
-            System.out.println("Finished");
+        	System.out.println("Solution found");
         }
+        System.out.println("Finished");
     }
    
     public int characterToID(char character) {
@@ -175,13 +168,15 @@ public class Search {
         	return false;
         }
     	
-    	ui.setState(field);
-        try {
-		    Thread.sleep(1);
-		}
-		catch(InterruptedException ex) {
-		    Thread.currentThread().interrupt();
-		}
+    	if (ANIMATED) {
+	    	ui.setState(field);
+	        try {
+			    Thread.sleep(1);
+			}
+			catch(InterruptedException ex) {
+			    Thread.currentThread().interrupt();
+			}
+    	}
     	
         boolean ok = true;
     	for (int i = 0; i < INPUT.length; i++)
@@ -226,9 +221,5 @@ public class Search {
         
         boolean result = backtracking(x, y);
         return result;
-    }
-    
-    public static void main(String args[]) {
-    	Search obj = new Search();
     }
 }
