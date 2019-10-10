@@ -3,8 +3,8 @@ import java.util.concurrent.TimeUnit;
 
 public class Search {
 	
-    public int NUMBER_OF_ROWS = 6;                  //
-    public int NUMBER_OF_COLS = 5;                   // 
+    public int NUMBER_OF_ROWS = 6;                  
+    public int NUMBER_OF_COLS = 5;                    
     public final int DEFAULT_CELL_SIZE = 50;                
     public final int PENT_SIZE = 5;
     public final int LOC_CENT_X = 2;
@@ -25,6 +25,12 @@ public class Search {
         NUMBER_OF_ROWS = height;
         NUMBER_OF_COLS = width;
         ANIMATED = ani;
+        
+        if (NUMBER_OF_ROWS * NUMBER_OF_COLS != inp.length * 5) {
+        	System.out.println("No solution");
+        	System.out.println("Finished");
+        	return;
+        }
         
         used = new boolean[NUMBER_OF_ROWS][NUMBER_OF_COLS];
     	
