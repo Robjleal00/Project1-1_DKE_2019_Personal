@@ -1,4 +1,6 @@
 Here's the alpha of project 1-1. 
+Working product, to be tested and presented.
+Please, comment and discuss any changes within this branch with group members from now on.
 
 TO DO: tester class, 2D dancing links class, Algorithm X class.  
 
