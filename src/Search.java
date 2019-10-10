@@ -52,12 +52,7 @@ public class Search {
     	
     	INPUT = inp;
     	
-        boolean result = false;
-        for (int centY = 0; centY < NUMBER_OF_ROWS && (!result); centY++) {
-        	for (int centX = 0; centX < NUMBER_OF_COLS && (!result); centX++) {
-        		result = backtracking(centX, centY);
-        	}
-        }
+        boolean result = backtracking();
        
         if (!result) {
         	System.out.println("No solution");
@@ -170,7 +165,7 @@ public class Search {
     	return true;
     }
     
-    public boolean backtracking(int x, int y) {   
+    public boolean backtracking() {   
     	//System.out.println(x + "  " + y);
         
     	if (!isValid()) {
@@ -194,41 +189,44 @@ public class Search {
     	if (ok)
     		return true;
     	
-    	if (field[y][x] == -1)
-    	{
-        	for (int i = 0; i < INPUT.length; i++) {
-	            if (mask[i] == 0) {
-	                continue;
-	            }
-	           
-	            int pentID = characterToID(INPUT[i]);
-	            
-	            int[][][] current = database.getPent(pentID);
-	            for (int j = 0; j < current.length; j++) {
-	            	boolean result = tryToPush(current[j], pentID, x, y);
-	            	if (result) {
-	            		mask[i] = 0;
-	            		boolean successfully = backtracking(x, y);
-	            		if (successfully) {
-	            			return true;
-	            		}
-	            	}
-	            	goBack(pentID);
-	            	mask[i] = 1;
-	            }
-	        }
+    	int currentY = -1, currentX = -1;
+    	for (int i = 0; i < NUMBER_OF_ROWS && currentY == -1; i++) {
+    		for (int j = 0; j < NUMBER_OF_COLS && currentX == -1; j++) { 
+    			if (field[i][j] == -1) {
+    				currentY = i;
+    				currentX = j;
+    			}
+    		}
     	}
-        x++;
-        if (x == NUMBER_OF_COLS) {
-        	x = 0;
-        	y++;
-        }
-        
-        if (y == NUMBER_OF_ROWS) {
-        	return false;
-        }
-        
-        boolean result = backtracking(x, y);
-        return result;
+    	
+    	for (int x = currentX; x < Math.min(NUMBER_OF_COLS, currentX + 5); x++) {
+    		for (int y = currentY; y < Math.min(NUMBER_OF_ROWS, currentY + 5); y++) {
+    			if (field[y][x] == -1) {
+    	        	for (int i = 0; i < INPUT.length; i++) {
+    		            if (mask[i] == 0) {
+    		                continue;
+    		            }
+    		           
+    		            int pentID = characterToID(INPUT[i]);
+    		            
+    		            int[][][] current = database.getPent(pentID);
+    		            for (int j = 0; j < current.length; j++) {
+    		            	boolean result = tryToPush(current[j], pentID, x, y);
+    		            	if (result) {
+    		            		mask[i] = 0;
+    		            		boolean successfully = backtracking();
+    		            		if (successfully) {
+    		            			return true;
+    		            		}
+    		            	}
+    		            	goBack(pentID);
+    		            	mask[i] = 1;
+    		            }
+    		        }
+    	    	}
+    		}
+    	}
+    	
+        return false;
     }
 }
